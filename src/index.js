@@ -4,21 +4,17 @@ import "./style.css";
 var cy = cytoscape({
   container: document.getElementById("cy"), // container to render in
 
-  elements: [
+  elements: {
     // list of graph elements to start with
-    {
-      // node a
-      data: { id: "a" },
-    },
-    {
-      // node b
-      data: { id: "b" },
-    },
-    {
-      // edge ab
-      data: { id: "ab", source: "a", target: "b" },
-    },
-  ],
+    nodes: [
+      { data: { id: "a" } },
+      { data: { id: "b" } },
+      { data: { id: "c" } },
+      { data: { id: "d", parent: "p" } },
+      { data: { id: "p" } },
+    ],
+    edges: [{ data: { id: "ab", source: "a", target: "b" } }],
+  },
 
   style: [
     // the stylesheet for the graph
