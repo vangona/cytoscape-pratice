@@ -1,6 +1,7 @@
 import cytoscape from "cytoscape";
-import coseBilkent from "cytoscape-cose-bilkent";
 import { processedEdges, processedNodes } from "./handleData";
+// @ts-ignore
+import * as coseBilkent from "cytoscape-cose-bilkent";
 
 cytoscape.use(coseBilkent);
 
@@ -56,7 +57,7 @@ const defaultOptions = {
   initialEnergyOnIncremental: 0.5,
 };
 
-export const cyData = cytoscape({
+const cyData = cytoscape({
   container: document.getElementById("cy"), // container to render in
 
   elements: {
@@ -104,3 +105,5 @@ export const cyData = cytoscape({
 
   wheelSensitivity: 0.1,
 });
+
+export default cyData;

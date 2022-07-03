@@ -1,10 +1,20 @@
 const jsonData = require("../data/data.json");
 
-const getNodesFromData = (data) => {
+interface node {
+  data: {
+    id: string;
+    name: string;
+    content?: string;
+    edge?: [];
+    childs?: [];
+  };
+}
+
+const getNodesFromData = (data: []) => {
   return data;
 };
 
-const getEdgesFromData = (data) => {
+const getEdgesFromData = (data: []) => {
   let result = [];
 
   for (let i = 0; i < data.length; i++) {
@@ -21,7 +31,7 @@ const getEdgesFromData = (data) => {
   return result;
 };
 
-const processDataFromJson = (rawData) => {
+const processDataFromJson = (rawData: []) => {
   let nodes = getNodesFromData(rawData);
   let edges = getEdgesFromData(rawData);
   return [nodes, edges];
