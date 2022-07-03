@@ -1,120 +1,108 @@
 [
   {
     "data": {
-      "id": "a",
-      "name": "생각"
+      "id": "think",
+      "name": "생각",
+      "childs": ["info", "experience", "mental"]
     }
   },
   {
     "data": {
-      "id": "b",
-      "parent": "c",
+      "id": "info",
+      "name": "지식",
+      "childs": ["coffee", "coding", "cs", "sc", "psycho", "counseling"]
+    }
+  },
+  {
+    "data": {
+      "id": "coffee",
       "name": "커피"
     }
   },
   {
     "data": {
-      "id": "co",
-      "parent": "c",
+      "id": "coding",
       "name": "코딩"
     }
   },
   {
     "data": {
-      "id": "co sc",
-      "parent": "c",
+      "id": "cs",
       "name": "컴퓨터 공학"
     }
   },
   {
     "data": {
       "id": "sc",
-      "parent": "c",
       "name": "과학"
     }
   },
   {
     "data": {
-      "id": "f",
-      "parent": "c",
+      "id": "psycho",
       "name": "심리학"
     }
   },
   {
     "data": {
-      "id": "cos",
-      "parent": "c",
+      "id": "counseling",
       "name": "상담학"
     }
   },
   {
     "data": {
-      "id": "c",
-      "edgeTo": "a",
-      "name": "지식"
+      "id": "experience",
+      "name": "경험",
+      "childs": ["everland", "jeju", "startup", "publish", "work"]
     }
   },
   {
     "data": {
-      "id": "d",
-      "parent": "p",
+      "id": "everland",
       "name": "에버랜드"
     }
   },
   {
     "data": {
-      "id": "j",
-      "parent": "p",
+      "id": "jeju",
       "name": "제주도 생활"
     }
   },
   {
     "data": {
-      "id": "founder",
-      "parent": "p",
+      "id": "startup",
       "name": "창업"
     }
   },
   {
     "data": {
-      "id": "pu",
-      "parent": "p",
+      "id": "publish",
       "name": "출판"
     }
   },
   {
     "data": {
-      "id": "wo",
-      "parent": "p",
+      "id": "work",
       "name": "노가다"
     }
   },
   {
     "data": {
-      "id": "p",
-      "name": "경험",
-      "edgeTo": "a"
-    }
-  },
-  {
-    "data": {
-      "id": "v",
+      "id": "mental",
       "name": "감성",
-      "edgeTo": "a"
+      "childs": ["love", "attach"]
     }
   },
   {
     "data": {
-      "id": "h",
-      "name": "사랑",
-      "parent": "v"
+      "id": "love",
+      "name": "사랑"
     }
   },
   {
     "data": {
-      "id": "at",
-      "name": "애착",
-      "parent": "v"
+      "id": "attach",
+      "name": "애착"
     }
   }
 ]

@@ -1,33 +1,70 @@
 import { jsonDataType, nodeType, edgeType } from "./handledata.d";
 const jsonData = require("../data/data.json");
 
-const getNodesFromData = (nodeData: jsonDataType[]): nodeType[] => {
-  const nodes = nodeData;
-  return nodes;
+const makeEdgeFromDepth = (source: nodeType, target: nodeType): edgeType => {
+  const result = {
+    data: {
+      id: `${source["data"]["id"]}/${target["data"]["id"]}`,
+      source: source["data"]["id"],
+      target: target["data"]["id"],
+    },
+  };
+
+  return result;
 };
 
-const getEdgesFromData = (edgeData: jsonDataType[]): edgeType[] => {
-  let result = [];
+const getNodesFromData = (
+  nodeData: jsonDataType[]
+): [nodeType[], edgeType[]] => {
+  const nodeResult: nodeType[] = [];
+  const edgeResult: edgeType[] = [];
 
-  for (let i = 0; i < edgeData.length; i++) {
-    if (Object.keys(edgeData[i]["data"]).includes("edgeTo")) {
-      result.push({
-        data: {
-          id: `${edgeData[i]["data"]["id"]}/${edgeData[i]["data"]["edgeTo"]}`,
-          target: `${edgeData[i]["data"]["edgeTo"]}`,
-          source: `${edgeData[i]["data"]["id"]}`,
-        },
-      });
+  function dfs(depth: number, node: nodeType) {
+    if (depth === 3) {
+      return;
+    }
+
+    if (depth === 0) {
+      for (let i: number = 0; i < node.data.childs.length; i++) {
+        for (let j: number = 0; j < nodeData.length; j++) {
+          if (node["data"]["childs"][i] === nodeData[j]["data"]["id"]) {
+            const childNode: nodeType = nodeData[j];
+            nodeResult.push(childNode);
+
+            edgeResult.push(makeEdgeFromDepth(node, nodeData[j]));
+
+            dfs(depth + 1, childNode);
+          }
+        }
+      }
+    }
+
+    if (depth === 1) {
+      for (let i: number = 0; i < node.data.childs.length; i++) {
+        for (let j: number = 0; j < nodeData.length; j++) {
+          if (node["data"]["childs"][i] === nodeData[j]["data"]["id"]) {
+            const childNode: nodeType = nodeData[j];
+            childNode["data"]["parent"] = node["data"]["id"];
+
+            nodeResult.push(childNode);
+            dfs(depth + 1, childNode);
+          }
+        }
+      }
     }
   }
-  return result;
+
+  nodeResult.push(nodeData[0]);
+  dfs(0, nodeData[0]);
+
+  return [nodeResult, edgeResult];
 };
 
 const processDataFromJson = (
   rawData: jsonDataType[]
 ): [nodeType[], edgeType[]] => {
-  let nodes = getNodesFromData(rawData);
-  let edges = getEdgesFromData(rawData);
+  let [nodes, edges] = getNodesFromData(rawData);
+
   return [nodes, edges];
 };
 

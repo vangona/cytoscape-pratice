@@ -17,6 +17,7 @@ export interface nodeType {
     content?: string;
     edge?: [];
     childs?: [];
+    parent?: string;
     // 지울 예정
     edgeTo: string;
   };

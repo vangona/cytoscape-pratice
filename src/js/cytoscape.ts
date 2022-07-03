@@ -1,5 +1,5 @@
 import cytoscape from "cytoscape";
-import { processedEdges, processedNodes } from "./handleData";
+import { processedNodes, processedEdges } from "./handleData";
 // @ts-ignore
 import * as coseBilkent from "cytoscape-cose-bilkent";
 
@@ -104,6 +104,10 @@ const cyData = cytoscape({
   },
 
   wheelSensitivity: 0.1,
+});
+
+cyData.on("tap", (e) => {
+  console.log(e.target.id());
 });
 
 export default cyData;
