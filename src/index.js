@@ -1,6 +1,7 @@
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import "./style.css";
+const jsonData = require("./data.json");
 
 cytoscape.use(coseBilkent);
 
@@ -56,151 +57,45 @@ const defaultOptions = {
   initialEnergyOnIncremental: 0.5,
 };
 
+const getNodesFromData = (data) => {
+  return data;
+};
+
+const getEdgesFromData = (data) => {
+  let result = [];
+
+  for (let i = 0; i < data.length; i++) {
+    if (Object.keys(data[i]["data"]).includes("edgeTo")) {
+      result.push({
+        data: {
+          id: `${data[i]["data"]["id"]}/${data[i]["data"]["edgeTo"]}`,
+          target: `${data[i]["data"]["edgeTo"]}`,
+          source: `${data[i]["data"]["id"]}`,
+        },
+      });
+    }
+  }
+
+  console.log(result);
+
+  return result;
+};
+
+const processDataFromJson = (rawData) => {
+  let nodes = getNodesFromData(rawData);
+  let edges = getEdgesFromData(rawData);
+  return [nodes, edges];
+};
+
+const [processedNodes, processedEdges] = processDataFromJson(jsonData);
+
 const cy = cytoscape({
   container: document.getElementById("cy"), // container to render in
 
   elements: {
     // list of graph elements to start with
-    nodes: [
-      {
-        data: {
-          id: "a",
-          name: "생각",
-        },
-      },
-      {
-        data: {
-          id: "b",
-          parent: "c",
-          name: "커피",
-        },
-      },
-      {
-        data: {
-          id: "co",
-          parent: "c",
-          name: "코딩",
-        },
-      },
-      {
-        data: {
-          id: "co sc",
-          parent: "c",
-          name: "컴퓨터 공학",
-        },
-      },
-      {
-        data: {
-          id: "sc",
-          parent: "c",
-          name: "과학",
-        },
-      },
-      {
-        data: {
-          id: "f",
-          parent: "c",
-          name: "심리학",
-        },
-      },
-      {
-        data: {
-          id: "cos",
-          parent: "c",
-          name: "상담학",
-        },
-      },
-      {
-        data: {
-          id: "c",
-          name: "지식",
-        },
-      },
-      {
-        data: {
-          id: "d",
-          parent: "p",
-          name: "에버랜드",
-        },
-      },
-      {
-        data: {
-          id: "j",
-          parent: "p",
-          name: "제주도 생활",
-        },
-      },
-      {
-        data: {
-          id: "founder",
-          parent: "p",
-          name: "창업",
-        },
-      },
-      {
-        data: {
-          id: "pu",
-          parent: "p",
-          name: "출판",
-        },
-      },
-      {
-        data: {
-          id: "wo",
-          parent: "p",
-          name: "노가다",
-        },
-      },
-      {
-        data: {
-          id: "p",
-          name: "경험",
-        },
-      },
-      {
-        data: {
-          id: "v",
-          name: "감성",
-        },
-      },
-      {
-        data: {
-          id: "h",
-          name: "사랑",
-          parent: "v",
-        },
-      },
-      {
-        data: {
-          id: "at",
-          name: "애착",
-          parent: "v",
-        },
-      },
-    ],
-    edges: [
-      {
-        data: {
-          id: "ac",
-          source: "c",
-          target: "a",
-        },
-      },
-      {
-        data: {
-          id: "pa",
-          source: "p",
-          target: "a",
-        },
-      },
-      {
-        data: {
-          id: "va",
-          source: "v",
-          target: "a",
-        },
-      },
-    ],
+    nodes: processedNodes,
+    edges: processedEdges,
   },
 
   style: [

@@ -9,7 +9,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   entry: "./src/index.js",
   output: {
-    filename: "bundle.js",
+    filename: "index.js",
     path: path.resolve(__dirname + "/build"),
   },
   devServer: {
@@ -28,6 +28,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: "/node_modules",
         use: ["babel-loader"],
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader",
       },
       {
         test: /\.html$/,
