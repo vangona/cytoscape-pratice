@@ -1,5 +1,6 @@
+import { nodeType, edgeType } from "./handledata.d";
 import cytoscape from "cytoscape";
-import { processedNodes, processedEdges } from "./handleData";
+import { makeElementsFromData } from "./handleData";
 // @ts-ignore
 import * as coseBilkent from "cytoscape-cose-bilkent";
 
@@ -57,57 +58,68 @@ const defaultOptions = {
   initialEnergyOnIncremental: 0.5,
 };
 
-const cyData = cytoscape({
-  container: document.getElementById("cy"), // container to render in
+const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
+  let cy = cytoscape({
+    container: document.getElementById("cy"), // container to render in
 
-  elements: {
-    // list of graph elements to start with
-    nodes: processedNodes,
-    edges: processedEdges,
-  },
-
-  style: [
-    // the stylesheet for the graph
-    {
-      selector: "node",
-      style: {
-        label: "data(name)",
-      },
-      css: {
-        "text-valign": "center",
-        "text-halign": "center",
-      },
+    elements: {
+      // list of graph elements to start with
+      nodes: processedNodes,
+      edges: processedEdges,
     },
 
-    {
-      selector: ":parent",
-      css: {
-        "text-valign": "top",
-        "text-halign": "center",
+    style: [
+      // the stylesheet for the graph
+      {
+        selector: "node",
+        style: {
+          label: "data(name)",
+        },
+        css: {
+          "text-valign": "center",
+          "text-halign": "center",
+        },
       },
+
+      {
+        selector: ":parent",
+        css: {
+          "text-valign": "top",
+          "text-halign": "center",
+        },
+      },
+
+      {
+        selector: "edge",
+        style: {
+          width: 3,
+          "line-color": "#ccc",
+          "target-arrow-color": "#ccc",
+          "target-arrow-shape": "triangle",
+        },
+      },
+    ],
+
+    layout: {
+      name: "cose-bilkent",
+      ...defaultOptions,
     },
 
-    {
-      selector: "edge",
-      style: {
-        width: 3,
-        "line-color": "#ccc",
-        "target-arrow-color": "#ccc",
-        "target-arrow-shape": "triangle",
-      },
-    },
-  ],
+    wheelSensitivity: 0.1,
+  });
 
-  layout: {
-    name: "cose-bilkent",
-    ...defaultOptions,
-  },
+  cy.on("tap", (e) => {
+    if (e.target.id) console.log(e.target.data());
+    if (e.target.id && e.target.isNode()) {
+      const [newNodes, newEdges] = makeElementsFromData(e.target.id());
+      cy = drawCy(newNodes, newEdges);
+    }
+  });
 
-  wheelSensitivity: 0.1,
-});
+  return cy;
+};
 
-cyData.on("tap", (e) => {
-  console.log(e.target.id());
-});
+const [processedNodes, processedEdges] = makeElementsFromData();
+const cy = drawCy(processedNodes, processedEdges);
 
-export default cyData;
+export default cy;

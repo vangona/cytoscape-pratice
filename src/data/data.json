@@ -10,13 +10,26 @@
     "data": {
       "id": "info",
       "name": "지식",
-      "childs": ["coffee", "coding", "cs", "sc", "psycho", "counseling"]
+      "childs": ["coding", "cs", "sc", "psycho", "counseling", "coffee"]
     }
   },
   {
     "data": {
       "id": "coffee",
-      "name": "커피"
+      "name": "커피",
+      "childs": ["various", "calibration"]
+    }
+  },
+  {
+    "data": {
+      "id": "various",
+      "name": "잡미"
+    }
+  },
+  {
+    "data": {
+      "id": "calibration",
+      "name": "세부조정"
     }
   },
   {
