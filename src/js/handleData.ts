@@ -1,29 +1,21 @@
+import { jsonDataType, nodeType, edgeType } from "./handledata.d";
 const jsonData = require("../data/data.json");
 
-interface node {
-  data: {
-    id: string;
-    name: string;
-    content?: string;
-    edge?: [];
-    childs?: [];
-  };
-}
-
-const getNodesFromData = (data: []) => {
-  return data;
+const getNodesFromData = (nodeData: jsonDataType[]): nodeType[] => {
+  const nodes = nodeData;
+  return nodes;
 };
 
-const getEdgesFromData = (data: []) => {
+const getEdgesFromData = (edgeData: jsonDataType[]): edgeType[] => {
   let result = [];
 
-  for (let i = 0; i < data.length; i++) {
-    if (Object.keys(data[i]["data"]).includes("edgeTo")) {
+  for (let i = 0; i < edgeData.length; i++) {
+    if (Object.keys(edgeData[i]["data"]).includes("edgeTo")) {
       result.push({
         data: {
-          id: `${data[i]["data"]["id"]}/${data[i]["data"]["edgeTo"]}`,
-          target: `${data[i]["data"]["edgeTo"]}`,
-          source: `${data[i]["data"]["id"]}`,
+          id: `${edgeData[i]["data"]["id"]}/${edgeData[i]["data"]["edgeTo"]}`,
+          target: `${edgeData[i]["data"]["edgeTo"]}`,
+          source: `${edgeData[i]["data"]["id"]}`,
         },
       });
     }
@@ -31,7 +23,9 @@ const getEdgesFromData = (data: []) => {
   return result;
 };
 
-const processDataFromJson = (rawData: []) => {
+const processDataFromJson = (
+  rawData: jsonDataType[]
+): [nodeType[], edgeType[]] => {
   let nodes = getNodesFromData(rawData);
   let edges = getEdgesFromData(rawData);
   return [nodes, edges];
