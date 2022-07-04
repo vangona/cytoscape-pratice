@@ -1,6 +1,6 @@
-import { nodeType, edgeType } from "./handledata.d";
 import cytoscape from "cytoscape";
-import { makeElementsFromData } from "./handleData";
+import { nodeType, edgeType } from "./handledata.d";
+import { getElementsFromData } from "./handleData";
 // @ts-ignore
 import * as coseBilkent from "cytoscape-cose-bilkent";
 
@@ -111,7 +111,7 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
   cy.on("tap", (e) => {
     if (e.target.id) console.log(e.target.data());
     if (e.target.id && e.target.isNode()) {
-      const [newNodes, newEdges] = makeElementsFromData(e.target.id());
+      const [newNodes, newEdges] = getElementsFromData(e.target.id());
       cy = drawCy(newNodes, newEdges);
     }
   });
@@ -119,7 +119,4 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
   return cy;
 };
 
-const [processedNodes, processedEdges] = makeElementsFromData();
-const cy = drawCy(processedNodes, processedEdges);
-
-export default cy;
+export default drawCy;
