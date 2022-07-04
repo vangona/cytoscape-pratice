@@ -9,6 +9,7 @@ let cy = drawTwoDepthCy();
 
 const body = document.querySelector("body");
 const buttonContainer = document.createElement("div");
+buttonContainer.classList.add("button-container");
 
 const twoDepthDfsButton = document.createElement("button");
 twoDepthDfsButton.innerText = "간단 그리기";
