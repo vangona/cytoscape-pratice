@@ -1,3 +1,4 @@
+import { state } from "./../index";
 import cytoscape from "cytoscape";
 import { nodeType, edgeType } from "./handledata.d";
 import { getElementsFromData } from "./handleData";
@@ -109,8 +110,7 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
   });
 
   cy.on("tap", (e) => {
-    if (e.target.id) console.log(e.target.data());
-    if (e.target.id && e.target.isNode()) {
+    if (e.target.id && e.target.isNode() && !state.fullMap) {
       const [newNodes, newEdges] = getElementsFromData(e.target.id());
       cy = drawCy(newNodes, newEdges);
     }
