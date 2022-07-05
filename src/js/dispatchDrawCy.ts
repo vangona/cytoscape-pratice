@@ -1,6 +1,7 @@
 import { getElementsFromData } from "./handleData";
 import drawCy from "./drawCy";
 
+// draw cy dispather
 export const drawTwoDepthCy = () => {
   const [processedNodes, processedEdges] = getElementsFromData();
 

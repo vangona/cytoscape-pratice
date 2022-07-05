@@ -1,11 +1,13 @@
-import { state } from "./../index";
-import cytoscape from "cytoscape";
+import { globalState } from "./../index";
+import cytoscape, { EventObject } from "cytoscape";
 import { nodeType, edgeType } from "./handledata.d";
 import { getElementsFromData } from "./handleData";
 // @ts-ignore
 import * as coseBilkent from "cytoscape-cose-bilkent";
 
 cytoscape.use(coseBilkent);
+
+let cy;
 
 const defaultOptions = {
   // Called on `layoutready`
@@ -59,8 +61,33 @@ const defaultOptions = {
   initialEnergyOnIncremental: 0.5,
 };
 
+// 클릭시 루트 교체
+const changeRootWithSingleTap = (e: EventObject) => {
+  if (!globalState.fullMap && Object.keys(e.target.data()).includes("childs")) {
+    const newRootId = e.target.id();
+    const [newNodes, newEdges] = getElementsFromData(newRootId);
+    globalState.rootStack.push(newRootId);
+    cy = drawCy(newNodes, newEdges);
+  }
+};
+
+// 더블 클릭시 링크 띄우기
+const openHrefWithDoubleTap = (e: EventObject) => {
+  const href = e.target.data().href;
+  if (href) window.open(href, "_blank");
+};
+
+// 클릭 지속시 새 노드 생성
+const makeNewNodeWithTapHold = (e: EventObject) => {
+  console.log(e.target.data());
+};
+
+// cy 그리기 함수
+// @processedNodes {nodeType[]} 데이터로부터 처리된 nodes
+// @processedEdges {edgeType[]} 데이터로부터 처리된 edges
+// @returns {cytoscape} cytoscape를 반환함
 const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
-  let cy = cytoscape({
+  cy = cytoscape({
     container: document.getElementById("cy"), // container to render in
 
     elements: {
@@ -109,11 +136,16 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
     wheelSensitivity: 0.1,
   });
 
-  cy.on("tap", (e) => {
-    if (e.target.id && e.target.isNode() && !state.fullMap) {
-      const [newNodes, newEdges] = getElementsFromData(e.target.id());
-      cy = drawCy(newNodes, newEdges);
-    }
+  cy.on("oneclick", "node", (e) => {
+    changeRootWithSingleTap(e);
+  });
+
+  cy.on("dblclick", "node", (e) => {
+    openHrefWithDoubleTap(e);
+  });
+
+  cy.on("taphold", "node", (e) => {
+    makeNewNodeWithTapHold(e);
   });
 
   return cy;

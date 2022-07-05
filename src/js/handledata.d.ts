@@ -3,10 +3,12 @@ export interface jsonDataType {
     id: string;
     name: string;
     content?: string;
-    edge?: [];
-    childs?: [];
-    // 지울 예정
-    edgeTo: string;
+    relations?: {
+      realization?: string[];
+      dependency?: string[];
+      assocation?: string[];
+    };
+    childs?: string[];
   };
 }
 
@@ -15,11 +17,13 @@ export interface nodeType {
     id: string;
     name: string;
     content?: string;
-    edge?: [];
-    childs?: [];
+    relations?: {
+      realization?: string[];
+      dependency?: string[];
+      assocation?: string[];
+    };
+    childs?: string[];
     parent?: string;
-    // 지울 예정
-    edgeTo: string;
   };
 }
 
