@@ -61,12 +61,23 @@ const defaultOptions = {
   initialEnergyOnIncremental: 0.5,
 };
 
+// rootStack 다루기
+const handleRootStack = (rootId: string) => {
+  if (globalState.rootStack[globalState.rootStackPointer - 1] !== rootId) {
+    globalState.rootStack.push(rootId);
+    globalState.rootStackPointer++;
+  }
+
+  console.log(globalState);
+};
+
 // 클릭시 루트 교체
+// rootStack에 id 추가
 const changeRootWithSingleTap = (e: EventObject) => {
   if (!globalState.fullMap && Object.keys(e.target.data()).includes("childs")) {
     const newRootId = e.target.id();
     const [newNodes, newEdges] = getElementsFromData(newRootId);
-    globalState.rootStack.push(newRootId);
+    handleRootStack(newRootId);
     cy = drawCy(newNodes, newEdges);
   }
 };
