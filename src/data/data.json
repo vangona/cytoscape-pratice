@@ -42,32 +42,36 @@
   {
     "data": {
       "id": "cs",
-      "name": "컴퓨터 공학"
+      "name": "컴퓨터 공학",
+      "relations": ["sc"]
     }
   },
   {
     "data": {
       "id": "sc",
-      "name": "과학"
+      "name": "과학",
+      "relations": ["psycho", "cs"]
     }
   },
   {
     "data": {
       "id": "psycho",
-      "name": "심리학"
+      "name": "심리학",
+      "relations": ["counseling"]
     }
   },
   {
     "data": {
       "id": "counseling",
-      "name": "상담학"
+      "name": "상담학",
+      "relations": ["psycho", "attatch", "startup"]
     }
   },
   {
     "data": {
       "id": "experience",
       "name": "경험",
-      "childs": ["everland", "jeju", "startup", "publish", "work"]
+      "childs": ["everland", "jeju", "startup", "work"]
     }
   },
   {
@@ -85,7 +89,15 @@
   {
     "data": {
       "id": "startup",
-      "name": "창업"
+      "name": "창업",
+      "childs": ["cafe", "publish"],
+      "relations": ["counseling", "psycho"]
+    }
+  },
+  {
+    "data": {
+      "id": "cafe",
+      "name": "카페 창업"
     }
   },
   {
@@ -116,7 +128,8 @@
   {
     "data": {
       "id": "attach",
-      "name": "애착"
+      "name": "애착",
+      "relations": ["counseling"]
     }
   }
 ]

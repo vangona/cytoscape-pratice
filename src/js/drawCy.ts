@@ -64,11 +64,9 @@ const defaultOptions = {
 // rootStack 다루기
 const handleRootStack = (rootId: string) => {
   if (globalState.rootStack[globalState.rootStackPointer - 1] !== rootId) {
-    globalState.rootStack.push(rootId);
+    globalState.rootStack.splice(globalState.rootStackPointer, 0, rootId);
     globalState.rootStackPointer++;
   }
-
-  console.log(globalState);
 };
 
 // 클릭시 루트 교체
@@ -135,6 +133,14 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
           "line-color": "#ccc",
           "target-arrow-color": "#ccc",
           "target-arrow-shape": "triangle",
+        },
+      },
+
+      {
+        selector: 'edge[dashline = "dashed"]',
+        style: {
+          "line-style": "dashed",
+          "target-arrow-shape": "none",
         },
       },
     ],

@@ -3,11 +3,7 @@ export interface jsonDataType {
     id: string;
     name: string;
     content?: string;
-    relations?: {
-      realization?: string[];
-      dependency?: string[];
-      assocation?: string[];
-    };
+    relations?: string[];
     childs?: string[];
   };
 }
@@ -17,11 +13,7 @@ export interface nodeType {
     id: string;
     name: string;
     content?: string;
-    relations?: {
-      realization?: string[];
-      dependency?: string[];
-      assocation?: string[];
-    };
+    relations?: string[];
     childs?: string[];
     parent?: string;
   };
