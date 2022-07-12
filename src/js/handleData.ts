@@ -6,7 +6,9 @@ export function getElementsFromData(
   rootSelector?: string | symbol
 ): [nodeType[], edgeType[]] {
   const nodeResult: nodeType[] = [];
+  const existNodeIds: string[] = [];
   const edgeResult: edgeType[] = [];
+  const relationDrawingQueue: nodeType[] = [];
 
   if (typeof rootSelector == "string") {
   }
@@ -46,7 +48,11 @@ export function getElementsFromData(
   const _makeRelationsEdges = (node: nodeType) => {
     for (let i = 0; i < node.data.relations.length; i++) {
       for (let j: number = 0; j < jsonData.length; j++) {
-        if (node.data.relations[i] === jsonData[j].data.id) {
+        // 데이터에서 노드를 찾고, 해당 노드가 존재하지 않는다면 노드를 추가하고 연관 간선을 추가한다.
+        if (
+          node.data.relations[i] === jsonData[j].data.id &&
+          !existNodeIds.includes(node.data.relations[i])
+        ) {
           // 간선을 잇는다
           const childNode: nodeType = jsonData[j];
           // 알 수 없는 오류로 depth가 1인 노드가
@@ -84,6 +90,7 @@ export function getElementsFromData(
           // parent를 초기화 시켜주었음.
           childNode.data.parent = "";
           nodeResult.push(childNode);
+          existNodeIds.push(childNode.data.id);
           edgeResult.push(_getEdgeFromDepth(node, childNode));
 
           callback(depth + 1, childNode);
@@ -101,6 +108,7 @@ export function getElementsFromData(
           const childNode: nodeType = jsonData[j];
           childNode.data.parent = node.data.id;
           nodeResult.push(childNode);
+          existNodeIds.push(childNode.data.id);
 
           _twoDepthDfs(depth + 1, childNode);
         }
@@ -133,7 +141,8 @@ export function getElementsFromData(
       _makeChildsCompounds(depth, node);
     }
 
-    if (Object.keys(node.data).includes("relations")) _makeRelationsEdges(node);
+    if (Object.keys(node.data).includes("relations"))
+      relationDrawingQueue.push(node);
   };
 
   // 추후 최대 depth 구현 가능성이 있어서 depth 인자를 줌.
@@ -161,6 +170,11 @@ export function getElementsFromData(
   // 전체 그래프 그리기
   if (typeof rootSelector == "symbol") {
     _fullDfs(0, root);
+  }
+
+  while (relationDrawingQueue.length) {
+    const currNode = relationDrawingQueue.shift();
+    _makeRelationsEdges(currNode);
   }
 
   return [nodeResult, edgeResult];
