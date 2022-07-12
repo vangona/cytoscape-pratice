@@ -16,6 +16,7 @@ export interface nodeType {
     relations?: string[];
     childs?: string[];
     parent?: string;
+    nodeShape?: string;
   };
 }
 

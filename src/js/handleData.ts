@@ -1,23 +1,7 @@
 import { jsonDataType, nodeType, edgeType } from "./handledata.d";
 const jsonData: jsonDataType[] = require("../data/data.json");
 
-const getEdgeFromDepth = (
-  source: nodeType,
-  target: nodeType,
-  dashline = "solid"
-): edgeType => {
-  const result = {
-    data: {
-      id: `${source.data.id}/${target.data.id}`,
-      source: target.data.id,
-      target: source.data.id,
-      dashline,
-    },
-  };
-
-  return result;
-};
-
+// Data에서 Cytoscape Elements(Nodes, Edges) 로딩
 export function getElementsFromData(
   rootSelector?: string | symbol
 ): [nodeType[], edgeType[]] {
@@ -29,6 +13,24 @@ export function getElementsFromData(
 
   if (typeof rootSelector == "boolean") {
   }
+
+  // 간선 그리기
+  const _getEdgeFromDepth = (
+    source: nodeType,
+    target: nodeType,
+    dashline = "solid"
+  ): edgeType => {
+    const result = {
+      data: {
+        id: `${source.data.id}/${target.data.id}`,
+        source: target.data.id,
+        target: source.data.id,
+        dashline,
+      },
+    };
+
+    return result;
+  };
 
   // id가 string이라면 rootNode를 반환하는 함수.
   // * 추후 재사용 될 시 위치 옮기기.
@@ -56,8 +58,8 @@ export function getElementsFromData(
           // id 값을 통해서 edge들의 target과 source를 일치시켜준다.
           const edge =
             node.data.id > childNode.data.id
-              ? getEdgeFromDepth(node, childNode, "dashed")
-              : getEdgeFromDepth(childNode, node, "dashed");
+              ? _getEdgeFromDepth(node, childNode, "dashed")
+              : _getEdgeFromDepth(childNode, node, "dashed");
 
           nodeResult.push(childNode);
           edgeResult.push(edge);
@@ -66,6 +68,7 @@ export function getElementsFromData(
     }
   };
 
+  // twoDepth에서 자식 노드에 간선을 연결
   const _makeChildsEdges = (
     depth: number,
     node: nodeType,
@@ -81,7 +84,7 @@ export function getElementsFromData(
           // parent를 초기화 시켜주었음.
           childNode.data.parent = "";
           nodeResult.push(childNode);
-          edgeResult.push(getEdgeFromDepth(node, childNode));
+          edgeResult.push(_getEdgeFromDepth(node, childNode));
 
           callback(depth + 1, childNode);
         }
@@ -89,6 +92,7 @@ export function getElementsFromData(
     }
   };
 
+  // twoDepth에서 손자노드를 compounds로 표현함.
   const _makeChildsCompounds = (depth: number, node: nodeType) => {
     for (let i: number = 0; i < node.data.childs.length; i++) {
       for (let j: number = 0; j < jsonData.length; j++) {
@@ -113,6 +117,7 @@ export function getElementsFromData(
 
     // 깊이가 0일 때, 자식 노드에 간선 잇기
     if (depth === 0) {
+      node.data.nodeShape = "rectangle";
       nodeResult.push(node);
 
       _twoDepthDfs(depth + 1, node);
@@ -148,10 +153,12 @@ export function getElementsFromData(
       ? jsonData[0]
       : _getNodeFromId(rootSelector);
 
+  // twoDepth 그래프 그리기
   if (typeof rootSelector == "string" || typeof rootSelector == "undefined") {
     _twoDepthDfs(0, root);
   }
 
+  // 전체 그래프 그리기
   if (typeof rootSelector == "symbol") {
     _fullDfs(0, root);
   }

@@ -109,12 +109,25 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
       // the stylesheet for the graph
       {
         selector: "node",
-        style: {
-          label: "data(name)",
-        },
         css: {
+          content: "data(name)",
           "text-valign": "center",
           "text-halign": "center",
+        },
+      },
+
+      {
+        selector: 'node[nodeShape = "rectangle"]',
+        style: {
+          backgroundColor: "white",
+          "border-color": "#ccc",
+          "border-width": 3,
+          shape: "rectangle",
+          height: "100px",
+          width: "200px",
+        },
+        css: {
+          content: "data(id)",
         },
       },
 
