@@ -54,7 +54,7 @@ const defaultOptions = {
   // Gravity range (constant) for compounds
   gravityRangeCompound: 1.5,
   // Gravity force (constant) for compounds
-  gravityCompound: 1.0,
+  gravityCompound: 2.0,
   // Gravity range (constant)
   gravityRange: 3.8,
   // Initial cooling factor for incremental layout
@@ -111,6 +111,8 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
         selector: "node",
         css: {
           content: "data(name)",
+          "padding-left": "30px",
+          "padding-right": "30px",
           "text-valign": "center",
           "text-halign": "center",
         },
@@ -123,8 +125,6 @@ const drawCy = (processedNodes: nodeType[], processedEdges: edgeType[]) => {
           "border-color": "#ccc",
           "border-width": 3,
           shape: "rectangle",
-          height: "100px",
-          width: "200px",
         },
         css: {
           content: "data(id)",
